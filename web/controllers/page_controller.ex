@@ -2,7 +2,11 @@ defmodule InfoParsePhoenix.PageController do
   use Phoenix.Controller
 
   def index(conn, _params) do
-    render conn, "index"
+    render conn, "index", title: "Main Page"
+  end
+
+  def directory(conn, _params) do
+    render conn, "directory", :classrooms, InfoParse.Directory.ordered_classrooms
   end
 
   def not_found(conn, _params) do
