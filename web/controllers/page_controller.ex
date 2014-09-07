@@ -6,7 +6,7 @@ defmodule InfoParsePhoenix.PageController do
   end
 
   def directory(conn, _params) do
-    render conn, "directory", :classrooms, InfoParse.Directory.ordered_classrooms
+    render conn, "directory", title: "Student Directory", classrooms: InfoParse.Directory.ordered_classrooms
   end
 
   def not_found(conn, _params) do
