@@ -1,6 +1,6 @@
-# InfoParse
+# InfoParse (Phoenix version)
 
-Elixir project built with Dyanmo and Ecto. Used to display information captured with `info_gather`.
+Elixir project built with Phoenix and Ecto. Used to display information captured with `info_gather`.
 
 To create a backup of a heroku postgres database:
 `heroku pgbackups:capture`
@@ -15,5 +15,9 @@ To import the capture into postgres:
 This application assumes you have a database `infogather` created which holds the tables defined in the
 `info_gather` project.
 
-There is a mix helper defined to create the required tables. Run `mix db.create`.
+Use ecto migrations to create the appropriate databases and tables:
+```
+   mix ecto.create InfoGather.Repo
+   mix ecto.migrate InfoGather.Repo
+```
 
