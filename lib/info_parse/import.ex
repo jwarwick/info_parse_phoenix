@@ -70,10 +70,10 @@ defmodule InfoParse.Import do
     if 0 == String.length(c[:firstname]) && 0 == String.length(c[:lastname]) do
       nil
     else
-      student = InfoGather.StudentModel.new(firstname: c[:firstname],
-        lastname: c[:lastname], classroom_id: c[:classroom], bus_id: c[:bus])
-      student = InfoGather.Repo.create(student)
-      student.primary_key
+      student = %InfoGather.StudentModel{firstname: c[:firstname],
+        lastname: c[:lastname], classroom_id: c[:classroom], bus_id: c[:bus]}
+      student = InfoGather.Repo.insert(student)
+      student.id
     end
   end
 
@@ -82,30 +82,30 @@ defmodule InfoParse.Import do
       nil
     else
       address_id = if p[:"parent-addr1"] do
-        address = InfoGather.AddressModel.new(phone: p[:"parent-tel"],
+        address = %InfoGather.AddressModel{phone: p[:"parent-tel"],
           address1: p[:"parent-addr1"], address2: p[:"parent-addr2"], 
-          city: p[:"parent-city"], state: p[:"parent-state"], zip: p[:"parent-zip"])
-        address = InfoGather.Repo.create(address)
-        address.primary_key
+          city: p[:"parent-city"], state: p[:"parent-state"], zip: p[:"parent-zip"]}
+        address = InfoGather.Repo.insert(address)
+        address.id
       end
 
-      parent = InfoGather.ParentModel.new(firstname: p[:"parent-firstname"],
+      parent = %InfoGather.ParentModel{firstname: p[:"parent-firstname"],
         lastname: p[:"parent-lastname"], email: p[:"parent-email"], phone: p[:"parent-mobile"],
-        address_id: address_id, notes: p[:notes])
-      parent = InfoGather.Repo.create(parent)
-      {parent.primary_key, address_id}
+        address_id: address_id, notes: p[:notes]}
+      parent = InfoGather.Repo.insert(parent)
+      {parent.id, address_id}
     end
   end
 
   defp add_student_parent(s, p) do
-    sp = InfoGather.StudentParentModel.new(student_id: s, parent_id: p)
-    InfoGather.Repo.create(sp)
+    sp = %InfoGather.StudentParentModel{student_id: s, parent_id: p}
+    InfoGather.Repo.insert(sp)
   end
 
   defp update_address_id({pid, nil}, last_addr_id) do
     query = from p in InfoGather.ParentModel, where: p.id == ^pid
     [parent] = InfoGather.Repo.all(query)
-    parent = parent.address_id(last_addr_id)
+    parent = %{parent | address_id: last_addr_id}
     InfoGather.Repo.update(parent)
     last_addr_id
   end
