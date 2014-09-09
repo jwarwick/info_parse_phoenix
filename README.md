@@ -1,13 +1,19 @@
-# InfoParsePhoenix
+# InfoParse
 
-To start your new Phoenix application you have to:
+Elixir project built with Dyanmo and Ecto. Used to display information captured with `info_gather`.
 
-1. Install dependencies with `mix deps.get`
-2. Start Phoenix router with `mix phoenix.start`
+To create a backup of a heroku postgres database:
+`heroku pgbackups:capture`
 
-Now you can visit `localhost:4000` from your browser.
+To download the capture:
+`curl -o latest.dump \`heroku pgbackups:url\``
 
+To import the capture into postgres:
+`pg_restore --verbose --clean --no-acl --no-owner -d infogather latest.dump`
 
-## Notes
+## Postgres Setup
+This application assumes you have a database `infogather` created which holds the tables defined in the
+`info_gather` project.
 
-* If you choose to change the application's structure, you could manually start the router from your code like this `InfoParsePhoenix.Router.start`
+There is a mix helper defined to create the required tables. Run `mix db.create`.
+

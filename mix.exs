@@ -24,8 +24,8 @@ defmodule InfoParsePhoenix.Mixfile do
   # { :barbat, "~> 0.1", github: "elixir-lang/barbat" }
   defp deps do
     [
-      {:phoenix, "0.4.0"},
       {:cowboy, "~> 1.0.0"},
+      {:phoenix, "0.4.0"},
       {:postgrex, ">= 0.0.0"},
       {:ecto, "~> 0.2.0"}
     ]

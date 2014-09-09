@@ -17,6 +17,9 @@ defmodule InfoGather.Repo do
   # postgres://user3123:passkja83kd8@ec2-117-21-174-214.compute-1.amazonaws.com:6212/db982398
   defp do_url(x), do: String.replace(x, ~r{^postgres}, "ecto")
 
+  def priv do
+    app_dir(:info_parse_phoenix, "priv/repo")
+  end
 end
 
 defmodule InfoGather.DataModel do
