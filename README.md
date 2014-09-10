@@ -18,6 +18,14 @@ This application assumes you have a database `infogather` created which holds th
 Use ecto migrations to create the appropriate databases and tables:
 ```
    mix ecto.create InfoGather.Repo
+   mix ecto.rollback InfoGather.Repo
    mix ecto.migrate InfoGather.Repo
+   mix db.import
 ```
+
+To view directory:
+```
+   mix phoenix.start
+```
+
 
