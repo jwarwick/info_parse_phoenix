@@ -184,14 +184,10 @@ defmodule InfoParse.Import do
   end
 
   defp key_specific_cleanup(v, k) when k in ["parent-state"] do
-    newV = v 
-            |> String.upcase
-           |> String.replace(~r/MASSACHUSETTS/, "")
-           |> String.replace(~r/[\s\\-]/, "")
-    if String.length(newV) != String.length(v) do
-      v = "MA"
-    end
-    v
+    v 
+    |> String.upcase
+    |> String.replace(~r/MASSACHUSETTS/, "MA")
+    |> String.replace(~r/[\s\\-]/, "")
   end
 
   defp key_specific_cleanup(v, _k), do: v

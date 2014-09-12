@@ -3,7 +3,9 @@
 Elixir project built with Phoenix and Ecto. Used to display information captured with `info_gather`.
 
 To create a backup of a heroku postgres database:
-`heroku pgbackups:capture`
+`heroku pgbackups` to list backups
+`heroku pgbackups:destroy <id>` to delete an existing backup
+`heroku pgbackups:capture` to capture the current database
 
 To download the capture:
 `curl -o latest.dump \`heroku pgbackups:url\``
