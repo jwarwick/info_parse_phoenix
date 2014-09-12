@@ -5,4 +5,6 @@ defmodule InfoParsePhoenix.Router do
   get "/", InfoParsePhoenix.PageController, :index
   get "/directory", InfoParsePhoenix.PageController, :directory
 
+  get "/students", InfoParsePhoenix.StudentController, :index
+
 end
