@@ -1,0 +1,6 @@
+<h1>Parents (<%= parent_count %>)</h1>
+<%= for {parent_id, {parent_last, parent_first}} <- all_parents do %>
+  <div>
+    <a href="/parent/<%= parent_id%>" class="parent_name"><%= parent_last %>, <%= parent_first %> </a>
+  </div>
+<% end %>
