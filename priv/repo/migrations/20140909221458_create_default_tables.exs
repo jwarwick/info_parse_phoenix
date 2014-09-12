@@ -1,4 +1,4 @@
-defmodule InfoGather.Repo.Migrations.CreateDefaultTables do
+defmodule InfoParse.Repo.Migrations.CreateDefaultTables do
   use Ecto.Migration
 
   def up do

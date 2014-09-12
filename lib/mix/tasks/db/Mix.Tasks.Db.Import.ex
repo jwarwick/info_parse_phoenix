@@ -2,6 +2,7 @@ defmodule Mix.Tasks.Db.Import do
   use Mix.Task
 
   require InfoGather.Repo
+  require InfoGather.Repo
 
   @shortdoc "Import directory info from the infogather database"
 

@@ -6,6 +6,7 @@ defmodule InfoParsePhoenix.Mixfile do
       version: "0.0.1",
       elixir: "~> 1.0.0-rc1",
       elixirc_paths: ["lib", "web"],
+      aliases: aliases,
       deps: deps ]
   end
 
@@ -14,6 +15,14 @@ defmodule InfoParsePhoenix.Mixfile do
     [
       mod: { InfoParsePhoenix, [] },
       applications: [:phoenix, :cowboy, :logger, :postgrex, :ecto]
+    ]
+  end
+
+  defp aliases do
+    [
+      server: "phoenix.start",
+      import: ["ecto.drop InfoParse.Repo", "ecto.create InfoParse.Repo",
+        "ecto.migrate InfoParse.Repo", "db.import"]
     ]
   end
 

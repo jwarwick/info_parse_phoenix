@@ -70,9 +70,9 @@ defmodule InfoParse.Import do
     if 0 == String.length(c[:firstname]) && 0 == String.length(c[:lastname]) do
       nil
     else
-      student = %InfoGather.StudentModel{firstname: c[:firstname],
+      student = %InfoParse.StudentModel{firstname: c[:firstname],
         lastname: c[:lastname], classroom_id: c[:classroom], bus_id: c[:bus]}
-      student = InfoGather.Repo.insert(student)
+      student = InfoParse.Repo.insert(student)
       student.id
     end
   end
@@ -82,31 +82,35 @@ defmodule InfoParse.Import do
       nil
     else
       address_id = if p[:"parent-addr1"] do
-        address = %InfoGather.AddressModel{phone: p[:"parent-tel"],
+        state = p[:"parent-state"]
+        if 0 == String.length(p[:"parent-state"]) && 0 != String.length(p[:"parent-addr1"]) do
+          state = "MA"
+        end
+        address = %InfoParse.AddressModel{phone: p[:"parent-tel"],
           address1: p[:"parent-addr1"], address2: p[:"parent-addr2"], 
-          city: p[:"parent-city"], state: p[:"parent-state"], zip: p[:"parent-zip"]}
-        address = InfoGather.Repo.insert(address)
+          city: p[:"parent-city"], state: state, zip: p[:"parent-zip"]}
+        address = InfoParse.Repo.insert(address)
         address.id
       end
 
-      parent = %InfoGather.ParentModel{firstname: p[:"parent-firstname"],
+      parent = %InfoParse.ParentModel{firstname: p[:"parent-firstname"],
         lastname: p[:"parent-lastname"], email: p[:"parent-email"], phone: p[:"parent-mobile"],
         address_id: address_id, notes: p[:notes]}
-      parent = InfoGather.Repo.insert(parent)
+      parent = InfoParse.Repo.insert(parent)
       {parent.id, address_id}
     end
   end
 
   defp add_student_parent(s, p) do
-    sp = %InfoGather.StudentParentModel{student_id: s, parent_id: p}
-    InfoGather.Repo.insert(sp)
+    sp = %InfoParse.StudentParentModel{student_id: s, parent_id: p}
+    InfoParse.Repo.insert(sp)
   end
 
   defp update_address_id({pid, nil}, last_addr_id) do
-    query = from p in InfoGather.ParentModel, where: p.id == ^pid
-    [parent] = InfoGather.Repo.all(query)
+    query = from p in InfoParse.ParentModel, where: p.id == ^pid
+    [parent] = InfoParse.Repo.all(query)
     parent = %{parent | address_id: last_addr_id}
-    InfoGather.Repo.update(parent)
+    InfoParse.Repo.update(parent)
     last_addr_id
   end
   defp update_address_id({_pid, addr_id}, _last_addr_id), do: addr_id
@@ -140,7 +144,7 @@ defmodule InfoParse.Import do
 
   defp cleanup_value(v) do
     v 
-      |> URI.decode 
+      |> URI.decode_www_form
       |> String.strip 
   end
 
@@ -174,14 +178,15 @@ defmodule InfoParse.Import do
     if 7 == String.length(v) do
       a = String.slice(v, 0, 3)
       b = String.slice(v, 3, 4)
-      v = Enum.join [a, b], "-"
+      v = Enum.join ["413", a, b], "-"
     end
     v
   end
 
   defp key_specific_cleanup(v, k) when k in ["parent-state"] do
     newV = v 
-           |> String.replace(~r/[Mm]assachusetts/, "")
+            |> String.upcase
+           |> String.replace(~r/MASSACHUSETTS/, "")
            |> String.replace(~r/[\s\\-]/, "")
     if String.length(newV) != String.length(v) do
       v = "MA"

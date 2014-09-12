@@ -11,21 +11,31 @@ To download the capture:
 To import the capture into postgres:
 `pg_restore --verbose --clean --no-acl --no-owner -d infogather latest.dump`
 
-## Postgres Setup
-This application assumes you have a database `infogather` created which holds the tables defined in the
-`info_gather` project.
+## Databases
+This project uses two databases `infogather` and `infoparse`. `infogather` holds the raw data dumped from Heroku. It
+is not modified. The mix task `db.import` parses the data in the `infogather` database and creates the approriate
+records in the `infoparse` database. It is not smart about removing old data, so the `infoparse` database should be
+dropped first.
 
 Use ecto migrations to create the appropriate databases and tables:
 ```
    mix ecto.create InfoGather.Repo
-   mix ecto.rollback InfoGather.Repo
-   mix ecto.migrate InfoGather.Repo
+   pg_restore --verbose --clean --no-acl --no-owner -d infogather latest.dump
+   mix ecto.drop InfoParse.Repo
+   mix ecto.create InfoParse.Repo
+   mix ecto.migrate InfoParse.Repo
    mix db.import
+```
+
+There is a mix alias `import` which will do all of the `InfoParse` steps:
+```
+  mix import
 ```
 
 To view directory:
 ```
    mix phoenix.start
+   (also aliased to `mix server`)
 ```
 
 

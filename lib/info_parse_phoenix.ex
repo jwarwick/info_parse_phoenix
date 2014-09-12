@@ -8,7 +8,8 @@ defmodule InfoParsePhoenix do
 
     children = [
       # Define workers and child supervisors to be supervised
-      worker(InfoGather.Repo, [])
+      worker(InfoGather.Repo, []),
+      worker(InfoParse.Repo, [])
     ]
 
     opts = [strategy: :one_for_one, name: InfoParsePhoenix.Supervisor]
