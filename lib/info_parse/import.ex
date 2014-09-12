@@ -161,7 +161,7 @@ defmodule InfoParse.Import do
       |> String.replace(~r/[Pp][\\.]?[Oo][\\.]?\s+/, "PO ")
   end
 
-  defp key_specific_cleanup(v, k) when k in ["parent-city"] do
+  defp key_specific_cleanup(v, k) when k in ["parent-city", "firstname", "lastname", "parent-firstname", "parent-lastname"] do
     v |> capitalize_all_words()
   end
 
@@ -195,8 +195,13 @@ defmodule InfoParse.Import do
   defp capitalize_all_words(s) do
     s
       |> String.split()
-      |> Enum.map(&String.capitalize(&1))
+      |> Enum.map(&capitalize_first_letter(&1))
       |> Enum.join(" ")
+  end
+
+  defp capitalize_first_letter(string) when is_binary(string) do
+    {char, rest} = String.Unicode.titlecase_once(string)
+    char <> rest
   end
 
   defp make_atom({k, v}), do: {String.to_atom(k), v}
