@@ -116,6 +116,7 @@ defmodule InfoParse.Import do
 
   defp lookup_zipcode("Shutesbury"), do: "01072"
   defp lookup_zipcode("Amherst"), do: "01002"
+  defp lookup_zipcode("Belchertown"), do: "01007"
   defp lookup_zipcode(_), do: ""
 
   defp add_student_parent(s, p) do
