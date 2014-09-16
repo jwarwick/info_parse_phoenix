@@ -12,7 +12,15 @@ defmodule InfoParse.Import do
   def parse_all do
     query = from(d in InfoGather.DataModel, select: d.entry)
     InfoGather.Repo.all(query)
-      |> Enum.map(&(parse_one(&1)))
+    |> Enum.map(&(parse_one(&1)))
+
+    children = from(d in InfoParse.StudentModel, select: d.firstname)
+    |> InfoParse.Repo.all
+    IO.puts "Found #{Enum.count children} children"
+
+    parents = from(d in InfoParse.ParentModel, select: d.firstname)
+    |> InfoParse.Repo.all
+    IO.puts "Found #{Enum.count parents} parents"
   end
 
   def parse_one(entry) do
@@ -58,11 +66,12 @@ defmodule InfoParse.Import do
 
     IO.puts "Parents:"
     IO.inspect parents
-    IO.inspect parent_ids
+    # IO.inspect parent_ids
 
     IO.puts "Children:"
     IO.inspect children
-    IO.inspect child_ids
+    # IO.inspect child_ids
+
 
   end
 
