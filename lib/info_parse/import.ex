@@ -95,9 +95,13 @@ defmodule InfoParse.Import do
         if 0 == String.length(p[:"parent-state"]) && 0 != String.length(p[:"parent-addr1"]) do
           state = "MA"
         end
+        zip = p[:"parent-zip"]
+        if 0 == String.length(p[:"parent-zip"]) do
+          zip = lookup_zipcode(p[:"parent-city"])
+        end
         address = %InfoParse.AddressModel{phone: p[:"parent-tel"],
           address1: p[:"parent-addr1"], address2: p[:"parent-addr2"], 
-          city: p[:"parent-city"], state: state, zip: p[:"parent-zip"]}
+          city: p[:"parent-city"], state: state, zip: zip}
         address = InfoParse.Repo.insert(address)
         address.id
       end
@@ -109,6 +113,10 @@ defmodule InfoParse.Import do
       {parent.id, address_id}
     end
   end
+
+  defp lookup_zipcode("Shutesbury"), do: "01072"
+  defp lookup_zipcode("Amherst"), do: "01002"
+  defp lookup_zipcode(_), do: ""
 
   defp add_student_parent(s, p) do
     sp = %InfoParse.StudentParentModel{student_id: s, parent_id: p}
