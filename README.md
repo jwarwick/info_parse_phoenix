@@ -40,4 +40,14 @@ To view directory:
    (also aliased to `mix server`)
 ```
 
+## Dump Email List
+
+To dump a list of parent names and email address, use these commands from `psql`:
+```
+   psql info_parse
+   \copy (select firstname, lastname, email from parent where email <> '') to '/tmp/emails.csv' with csv
+
+   sort emails.csv | uniq | awk -F"," '{ print $1 " " $2 "," $3}' > clean_emails.csv
+```
+Then edit in your favorite editor to fix invalid names and addresses...
 
