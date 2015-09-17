@@ -2,6 +2,8 @@
 
 Elixir project built with Phoenix and Ecto. Used to display information captured with `info_gather`.
 
+Requires Erlang R17 and Elixir v1.0.4 (commit e02d7bf)
+
 To create a backup of a heroku postgres database:
 `heroku pg:backups --app <appname>` to list backups
 `heroku pg:backups delete <id> --app <appname>` to delete an existing backup
